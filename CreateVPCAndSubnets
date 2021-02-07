@@ -1,0 +1,28 @@
+#!/bin/sh -eu
+
+if [ -z "$2" ]; then
+echo "usage: $0 <vpcid>"
+exit 64
+fi
+
+cidrblock="$1"
+cidr1="$2"
+cidr2="$3"
+cidr3="$4"
+cidr4="$5"
+cidr5="$6"
+cidr6="$7"
+
+# "10.0.0.0/20" "10.0.0.0/21" "10.0.8.0/23" "10.0.10.0/23" "10.0.12.0/24" "10.0.13.0/24" "10.0.14.0/26"
+# aws ec2 create-vpc --cidr-block 10.0.0.0/20 | grep VpcId | sed -E 's/^.*(vpc-[a-z0-9]+).*$/\1/' | echo "$vpcid"
+# vpcid=$(aws ec2 create-vpc --cidr-block 10.0.0.0/20 | grep VpcId | sed -E 's/^.*(vpc-[a-z0-9]+).*$/\1/')
+
+vpcid=$(aws ec2 create-vpc --cidr-block "${cidrblock:?Variable CIDRBLOCK wurde nicht Übergeben}}" | grep VpcId | sed -E 's/^.*(vpc-[a-z0-9]+).*$/\1/')
+aws ec2 create-subnet --vpc-id "${vpcid:?Variable VPCID wurde nicht Übergeben}" --cidr-block "${cidr3:?Variable CIDR2 wurde nicht Übergeben}" 
+aws ec2 create-subnet --vpc-id "${vpcid:?Variable VPCID wurde nicht Übergeben}" --cidr-block "${cidr4:?Variable CIDR3 wurde nicht Übergeben}" 
+aws ec2 create-subnet --vpc-id "${vpcid:?Variable VPCID wurde nicht Übergeben}" --cidr-block "${cidr2:?Variable CIDR1 wurde nicht Übergeben}" 
+aws ec2 create-subnet --vpc-id "${vpcid:?Variable VPCID wurde nicht Übergeben}" --cidr-block "${cidr5:?Variable CIDR4 wurde nicht Übergeben}" 
+aws ec2 create-subnet --vpc-id "${vpcid:?Variable VPCID wurde nicht Übergeben}" --cidr-block "${cidr6:?Variable CIDR5 wurde nicht Übergeben}" 
+aws ec2 create-subnet --vpc-id "${vpcid:?Variable VPCID wurde nicht Übergeben}" --cidr-block "${cidr7:?Variable CIDR6 wurde nicht Übergeben}" 
+
+
